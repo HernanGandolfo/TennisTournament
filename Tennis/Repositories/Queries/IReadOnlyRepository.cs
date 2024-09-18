@@ -7,6 +7,6 @@ namespace Tennis.Repositories.Queries
     {
         Task<List<Player>> GetPlayersAsync(Expression<Func<Player, bool>> predicate = null);
 
-        Task<List<HistoryTournament>> GetHistoryTournamentsAsync(Expression<Func<HistoryTournament, bool>> predicate = null);
+        Task<List<Tournament>> GetHistoryTournamentsAsync(Expression<Func<Tournament, bool>> predicate = null);
     }
 }

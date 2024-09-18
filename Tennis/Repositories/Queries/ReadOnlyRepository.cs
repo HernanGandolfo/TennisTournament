@@ -13,7 +13,7 @@ namespace Tennis.Repositories.Queries
             return await _supabaseService.GetPlayersAsync(predicate);
         }
 
-        public async Task<List<HistoryTournament>> GetHistoryTournamentsAsync(Expression<Func<HistoryTournament, bool>> predicate = null)
+        public async Task<List<Tournament>> GetHistoryTournamentsAsync(Expression<Func<Tournament, bool>> predicate = null)
         {
             return await _supabaseService.GetHistoryTournamentAsync(predicate);
         }

@@ -1,20 +1,22 @@
 ﻿using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
+using System.Reflection.Metadata;
 
 namespace Tennis.Data.Entities
 {
-    [Table("players")]
-    public class Player : BaseModel
+    [Table("tournament")]
+    public class Tournament : BaseModel
     {
         [PrimaryKey("id")]
         public int Id { get; set; }
-
+        
         [Column("name")]
         public string Name { get; set; }
 
-        [Column("playerTypeId")]
-        public int PlayerTypeId { get; set; }
+        [Column("type")]
+        public int Type { get; set; }
 
-        public int SkillLevel { get; set; }
+        [Column("created")]
+        public DateTime Created { get; set; }
     }
 }

@@ -2,9 +2,11 @@
 {
     public class PlayerDto
     {
-        public int Id { get; set; }
+        public string TournamentName { get; set; }
 
-        public string Name { get; set; }
+        public int IdPlayer { get; set; }
+
+        public string NamePlayer { get; set; }
 
         public int SkillLevel { get; set; }
     }

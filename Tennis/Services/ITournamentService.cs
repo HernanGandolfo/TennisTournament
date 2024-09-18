@@ -7,7 +7,7 @@ namespace Tennis.Services
     public interface ITournamentService
     {
         Task<List<Player>> GetPlayersRoundsAsyns(int numberOfRounds, PlayerType typeTournament);
-        PlayerDto SimulateTournament(List<Player> players, PlayerType typeTournament);
-        Task<HistoryTournament> GetHistoryTournamentAsync();
+        Task<PlayerDto> SimulateTournament(List<Player> players, PlayerType typeTournament);
+        Task<Tournament> GetHistoryTournamentAsync();
     }
 }

@@ -37,7 +37,7 @@ namespace Tennis.Controllers
                 return BadRequest("The number of players does not match the number of rounds specified.");
             }
 
-            PlayerDto winner = _tournament.SimulateTournament(canPlayers, typeTournament);
+            PlayerDto winner = await _tournament.SimulateTournament(canPlayers, typeTournament);
             return Ok(winner);
         }
 

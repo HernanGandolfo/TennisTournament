@@ -1,4 +1,5 @@
 ﻿using Tennis.Data.Entities;
+using Tennis.Data.Enum;
 using Tennis.Data.Services;
 
 namespace Tennis.Repositories.Command
@@ -7,9 +8,14 @@ namespace Tennis.Repositories.Command
     {
         private readonly SupabaseService _supabaseService = supabaseService;
 
-        public async Task<HistoryTournament> AddPlayerAsync(HistoryTournament history)
+        public async Task AddHistoryTournamentAsync(List<PlayerHistory> history)
         {
-            return await _supabaseService.AddHistoryTournamentAsync(history);
+            await _supabaseService.AddHistoryTournamentAsync(history);
+        }
+
+        public async Task<Tournament> CreateTournamentAsync(PlayerType typeTournament)
+        {
+            return await _supabaseService.CreateTournamentAsync(typeTournament);
         }
     }
 }

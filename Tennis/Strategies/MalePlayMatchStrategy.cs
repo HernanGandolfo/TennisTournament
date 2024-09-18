@@ -19,5 +19,19 @@ namespace Tennis.Strategies
 
             return score1 > score2 ? play1 : play2;
         }
+
+        public List<PlayerHistory> PlayerHistoryMatch(List<Player> players, int idTournament, int roundPosition)
+        {
+            var play = players.Adapt<List<MalePlayer>>();
+            var playersHistory = play.Adapt<List<PlayerHistory>>();
+
+            playersHistory.ForEach(x =>
+            {
+                x.IdTournament = idTournament;
+                x.PositionRound = roundPosition;
+            });
+
+            return playersHistory;
+        }
     }
 }
