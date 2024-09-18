@@ -1,20 +1,28 @@
 ﻿using Mapster;
 using Tennis.Data.Entities;
+using Tennis.Data.Enum;
 using Tennis.MappingProfile.Dtos;
-using Tennis.Repositories;
+using Tennis.Repositories.Queries;
 using Tennis.Strategies;
 
 namespace Tennis.Services
 {
-    public class TournamentService(IPlayerRepository playerRepository, IPlayMatchStrategy playMatchStrategy) : ITournamentService
+    public class TournamentService(IReadOnlyRepository readOnlyRepository, IPlayMatchStrategy playMatchStrategy) : ITournamentService
     {
-        private readonly IPlayerRepository _playerRepository = playerRepository;
+        private readonly IReadOnlyRepository _readOnlyRepository = readOnlyRepository;
         private readonly IPlayMatchStrategy _playMatchStrategy = playMatchStrategy;
+
+        public async Task<HistoryTournament> GetHistoryTournamentAsync()
+        {
+            var result = await _readOnlyRepository.GetHistoryTournamentsAsync();
+
+            return result.FirstOrDefault();
+        }
 
         public async Task<List<Player>> GetPlayersRoundsAsyns(int numberOfRounds, PlayerType typeTournament)
         {
             var intType = (int)typeTournament;
-            var players = await _playerRepository.GetPlayersAsync(x => x.PlayerTypeId == intType);
+            var players = await _readOnlyRepository.GetPlayersAsync(x => x.PlayerTypeId == intType);
 
             var canPlayer = (int)Math.Pow(2, numberOfRounds);
             if (players.Count <= canPlayer)
@@ -27,6 +35,8 @@ namespace Tennis.Services
         public PlayerDto SimulateTournament(List<Player> players, PlayerType typeTournament)
         {
             IPlayMatchStrategy playMatchStrategy = typeTournament == PlayerType.Male ? new MalePlayMatchStrategy() : new FemalePlayMatchStrategy();
+            
+            List<HistoryTournament> history = [];
 
             while (players.Count > 1)
             {

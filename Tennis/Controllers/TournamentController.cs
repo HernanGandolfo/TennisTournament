@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using Swashbuckle.AspNetCore.Annotations;
-using Tennis.Data.Entities;
 using Tennis.MappingProfile.Dtos;
 using Tennis.Services;
+using Tennis.Data.Enum;
 
 namespace Tennis.Controllers
 {
@@ -24,21 +24,29 @@ namespace Tennis.Controllers
         }
 
         [HttpGet("simulate")]
-        [SwaggerOperation(Summary = "Simula un torneo y devuelve el ganador.")]
+        [SwaggerOperation(Summary = "Simulate a tournament and return the winner.")]
         [ProducesDefaultResponseType(typeof(PlayerDto))]
         public async Task<IActionResult> SimulateTournament(
             [Required, FromQuery] int numberOfRounds,
-            [SwaggerParameter(Description = "Tipo de torneo: 1 es Masculino y 2 es Femenino"), FromQuery] PlayerType typeTournament)
+            [SwaggerParameter(Description = "Tournament type: 1 is Men's and 2 is Women's"), FromQuery] PlayerType typeTournament)
         {
             var canPlayers = await _tournament.GetPlayersRoundsAsyns(numberOfRounds, typeTournament);
 
             if (canPlayers is null)
             {
-                return BadRequest("La cantidad de jugadores no coincide con la cantidad de rondas especificadas.");
+                return BadRequest("The number of players does not match the number of rounds specified.");
             }
 
             PlayerDto winner = _tournament.SimulateTournament(canPlayers, typeTournament);
             return Ok(winner);
+        }
+
+        [HttpGet("historyTournament")]
+        [SwaggerOperation(Summary = "Returns tournament history.")]
+        // [ProducesDefaultResponseType(typeof(PlayerDto))]
+        public async Task<IActionResult> HistoryTournament()
+        {
+            return Ok(await _tournament.GetHistoryTournamentAsync());
         }
     }
 }

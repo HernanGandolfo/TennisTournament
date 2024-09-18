@@ -12,9 +12,10 @@ namespace Tennis.Data.Entities
         [Column("name")]
         public string Name { get; set; }
 
-        public int SkillLevel { get; set; }
-
         [Column("playerTypeId")]
         public int PlayerTypeId { get; set; }
+
+
+        public int SkillLevel { get; set; }
     }
 }

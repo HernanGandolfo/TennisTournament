@@ -1,5 +1,6 @@
 ﻿using Supabase;
 using System.Linq.Expressions;
+using System.Reflection;
 using Tennis.Data.Entities;
 
 namespace Tennis.Data.Services
@@ -32,5 +33,25 @@ namespace Tennis.Data.Services
             }
         }
 
+        public async Task<List<HistoryTournament>> GetHistoryTournamentAsync(Expression<Func<HistoryTournament, bool>> predicate = null)
+        {
+            if (predicate is null)
+            {
+                var response = await _client.From<HistoryTournament>().Get();
+                return response.Models;
+            }
+            else
+            {
+                var responseWithPredicate = await _client.From<HistoryTournament>().Where(predicate).Get();
+                return responseWithPredicate.Models;
+            }
+        }
+
+        public async Task<HistoryTournament> AddHistoryTournamentAsync(HistoryTournament history)
+        {
+            var insertResponse = await _client.From<HistoryTournament>().Insert(history);
+            var insertedRecord = insertResponse.Models.FirstOrDefault();
+            return insertedRecord;
+        }
     }
 }

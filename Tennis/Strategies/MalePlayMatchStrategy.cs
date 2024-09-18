@@ -10,7 +10,7 @@ namespace Tennis.Strategies
             var play1 = player1.Adapt<MalePlayer>();
             var play2 = player2.Adapt<MalePlayer>();
 
-            Random rand = new Random();
+            Random rand = new();
             int luckFactor1 = rand.Next(0, 100);
             int luckFactor2 = rand.Next(0, 100);
 

@@ -1,7 +1,9 @@
 ﻿using Mapster;
+using Microsoft.OpenApi.Models;
 using Supabase;
 using Tennis.Data.Services;
-using Tennis.Repositories;
+using Tennis.Repositories.Command;
+using Tennis.Repositories.Queries;
 using Tennis.Services;
 using Tennis.Strategies;
 
@@ -21,7 +23,8 @@ namespace Tennis.Dependencies
             services.AddSingleton(supabaseService);
 
             // Add services to the container.
-            services.AddScoped<IPlayerRepository, PlayerRepository>();
+            services.AddScoped<IReadOnlyRepository, ReadOnlyRepository>();
+            services.AddScoped<IWriteRepository, WriteRepository>();
             services.AddScoped<ITournamentService, TournamentService>();
             services.AddScoped<IPlayMatchStrategy, MalePlayMatchStrategy>();
             services.AddScoped<IPlayMatchStrategy, FemalePlayMatchStrategy>();
@@ -33,7 +36,12 @@ namespace Tennis.Dependencies
             MapsterDependencies.AddMappingProfile(services);
 
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            //services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Tennis API", Version = "v1" });
+                c.EnableAnnotations();
+            });
         }
 
         private static SupabaseService ConfigureDbSupaBase()
