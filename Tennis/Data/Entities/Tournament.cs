@@ -16,7 +16,13 @@ namespace Tennis.Data.Entities
         [Column("type")]
         public int Type { get; set; }
 
+        [Column("numberOfRounds")]
+        public int NumberOfRounds { get; set; }
+
         [Column("created")]
         public DateTime Created { get; set; }
+        
+        [Reference(typeof(PlayerHistory))]
+        public List<PlayerHistory> PlayerHistories { get; set; }
     }
 }

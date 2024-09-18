@@ -1,10 +1,12 @@
 ﻿using Mapster;
+using System.Linq.Expressions;
 using System.Xml.Linq;
 using Tennis.Data.Entities;
 using Tennis.Data.Enum;
 using Tennis.MappingProfile.Dtos;
 using Tennis.Repositories.Command;
 using Tennis.Repositories.Queries;
+using Tennis.Services.Request;
 using Tennis.Strategies;
 
 namespace Tennis.Services
@@ -15,11 +17,19 @@ namespace Tennis.Services
         private readonly IWriteRepository _writeRepository = writeRepository;
         private readonly IPlayMatchStrategy _playMatchStrategy = playMatchStrategy;
 
-        public async Task<Tournament> GetHistoryTournamentAsync()
+        public async Task<List<TournamentDto>> GetHistoryTournamentAsync(TournamentSearchRequest request)
         {
-            var result = await _readOnlyRepository.GetHistoryTournamentsAsync();
+            var result = await _readOnlyRepository.GetHistoryTournamentsAsync(request);
 
-            return result.FirstOrDefault();
+            var sortedTournaments = result.Select(t =>
+            {
+                t.PlayerHistories = t.PlayerHistories
+                    .OrderByDescending(ph => ph.PositionRound)
+                    .ToList();
+                return t;
+            }).ToList();
+            
+            return sortedTournaments.Adapt<List<TournamentDto>>();
         }
 
         public async Task<List<Player>> GetPlayersRoundsAsyns(int numberOfRounds, PlayerType typeTournament)
@@ -35,11 +45,11 @@ namespace Tennis.Services
             return this.ObtenerObjetosAleatorios(players, canPlayer);
         }
 
-        public async Task<PlayerDto> SimulateTournament(List<Player> players, PlayerType typeTournament)
+        public async Task<PlayerDto> SimulateTournament(List<Player> players, PlayerType typeTournament, int numberOfRounds)
         {
             IPlayMatchStrategy playMatchStrategy = typeTournament == PlayerType.Male ? new MalePlayMatchStrategy() : new FemalePlayMatchStrategy();
 
-            var createTournament = await _writeRepository.CreateTournamentAsync(typeTournament);
+            var createTournament = await _writeRepository.CreateTournamentAsync(typeTournament, numberOfRounds);
             List<PlayerHistory> histoyOrigins = [];
 
             int round = 1;

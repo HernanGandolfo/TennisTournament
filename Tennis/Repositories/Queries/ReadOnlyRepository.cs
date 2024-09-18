@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Tennis.Data.Entities;
 using Tennis.Data.Services;
+using Tennis.Services.Request;
 
 namespace Tennis.Repositories.Queries
 {
@@ -13,9 +14,9 @@ namespace Tennis.Repositories.Queries
             return await _supabaseService.GetPlayersAsync(predicate);
         }
 
-        public async Task<List<Tournament>> GetHistoryTournamentsAsync(Expression<Func<Tournament, bool>> predicate = null)
+        public async Task<List<Tournament>> GetHistoryTournamentsAsync(TournamentSearchRequest request)
         {
-            return await _supabaseService.GetHistoryTournamentAsync(predicate);
+            return await _supabaseService.GetHistoryTournamentAsync(request);
         }
     }
 }

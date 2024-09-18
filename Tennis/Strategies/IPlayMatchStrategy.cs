@@ -1,4 +1,5 @@
 ﻿using Tennis.Data.Entities;
+using Tennis.MappingProfile.Dtos;
 
 namespace Tennis.Strategies
 {

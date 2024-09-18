@@ -1,7 +1,4 @@
-﻿using Supabase.Postgrest.Attributes;
-using Supabase.Postgrest.Models;
-
-namespace Tennis.Data.Enum
+﻿namespace Tennis.Data.Enum
 {
     public enum PlayerType
     {

@@ -6,6 +6,7 @@
         public string Name { get; set; }
         public string Type { get; set; }
         public DateTime Created { get; set; }
-        List<PlayerHistoryDto> PlayerHistories  { get; set; }
+        public int NumberOfRounds { get; set; }
+        public List<PlayerHistoryDto> PlayerHistories  { get; set; }
     }
 }

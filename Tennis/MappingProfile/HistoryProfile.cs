@@ -24,6 +24,23 @@ namespace Tennis.MappingProfile
               .Map(x => x.ReactionTime, y => y.ReactionTime)
               .Ignore(x => x.Id, x => x.MovementSpeed,x => x.Strength, x => x.Winner);
 
+            config.NewConfig<Tournament, TournamentDto>()
+                .Map(x => x.Id, y => y.Id)
+                .Map(x => x.Name, y => y.Name)
+                .Map(x => x.Created, y => y.Created)
+                .Map(x => x.NumberOfRounds, y => y.NumberOfRounds)
+                .Map(x => x.Type, y => y.Type == 1 ? PlayerType.Male : PlayerType.Female)
+                .Map(x => x.PlayerHistories, y => y.PlayerHistories);
+
+            config.NewConfig<PlayerHistory, PlayerHistoryDto>()
+               .Map(x => x.IdPlayer, y => y.Id)
+               .Map(x => x.PlayerName, y => y.PlayerName)
+               .Map(x => x.SkillLevel, y => y.SkillLevel)
+               .Map(x => x.MovementSpeed, y => y.MovementSpeed)
+               .Map(x => x.Strength, y => y.Strength)
+               .Map(x => x.MovementSpeed, y => y.MovementSpeed)
+               .Map(x => x.RoundPosition, y => $"Finalist in the round {y.PositionRound}")
+               .Map(x => x.Winner, y => y.Winner);
         }
     }
 }

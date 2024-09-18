@@ -35,7 +35,7 @@ namespace Tennis.Controllers
                 return BadRequest( new ValidationResult("The number of players does not match the number of rounds specified."));
             }
 
-            PlayerDto winner = await _tournament.SimulateTournament(canPlayers, typeTournament);
+            PlayerDto winner = await _tournament.SimulateTournament(canPlayers, typeTournament, numberOfRounds);
             return Ok(winner);
         }
 
@@ -44,7 +44,8 @@ namespace Tennis.Controllers
         [ProducesDefaultResponseType(typeof(List<PlayerHistoryDto>))]
         public async Task<IActionResult> HistoryTournament([FromQuery] TournamentSearchRequest request)
         {
-            return Ok(await _tournament.GetHistoryTournamentAsync());
+            var result = await _tournament.GetHistoryTournamentAsync(request);
+            return Ok(result);
         }
     }
 }

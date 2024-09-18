@@ -1,7 +1,9 @@
 ﻿using Supabase;
+using Supabase.Postgrest.Responses;
 using System.Linq.Expressions;
 using Tennis.Data.Entities;
 using Tennis.Data.Enum;
+using Tennis.Services.Request;
 
 namespace Tennis.Data.Services
 {
@@ -33,19 +35,29 @@ namespace Tennis.Data.Services
             }
         }
 
-        public async Task<List<Tournament>> GetHistoryTournamentAsync(Expression<Func<Tournament, bool>> predicate = null)
+        public async Task<List<Tournament>> GetHistoryTournamentAsync(TournamentSearchRequest request = null)
         {
-            if (predicate is null)
+            ModeledResponse<Tournament> responseNameTour = null;
+            List<Tournament> response = null;
+
+            responseNameTour = !string.IsNullOrEmpty(request.NameTournament) ?
+                responseNameTour = await _client.From<Tournament>().Filter(x => x.Name, Supabase.Postgrest.Constants.Operator.ILike, $"%{request.NameTournament}%").Get() 
+                : responseNameTour = await _client.From<Tournament>().Get();
+                
+            response = responseNameTour.Models;
+            
+            if (request.DateTournament.HasValue)
             {
-                var response = await _client.From<Tournament>().Get();
-                return response.Models;
+                response = responseNameTour.Models.Where(x => x.Created == request.DateTournament.Value).ToList();
             }
-            else
+
+            if (request.TypeTournament != 0)
             {
-                var responseWithPredicate = await _client.From<Tournament>().Where(predicate).Get();
-                return responseWithPredicate.Models;
+                response = response.Where(x => x.Type == (int)request.TypeTournament).ToList();
             }
+            return response;
         }
+
 
         public async Task<bool> AddHistoryTournamentAsync(List<PlayerHistory> history)
         {
@@ -53,7 +65,7 @@ namespace Tennis.Data.Services
             return insertResponse.ResponseMessage.IsSuccessStatusCode;
         }
 
-        internal async Task<Tournament> CreateTournamentAsync(PlayerType typeTournament)
+        public async Task<Tournament> CreateTournamentAsync(PlayerType typeTournament, int numberOfRounds)
         {
             var tournament = new Tournament();
             tournament.Created = DateTime.Now;
@@ -61,18 +73,20 @@ namespace Tennis.Data.Services
             {
                 var existingTournaments = await _client.From<Tournament>().Where(t => t.Type == (int)PlayerType.Male).Get();
                 var tournamentNames = existingTournaments.Models.Select(t => t.Name).ToList();
-                var newTournamentName = GenerateUniqueTournamentName(tournamentNames, "Tournament Male  ");
+                var newTournamentName = GenerateUniqueTournamentName(tournamentNames, "Tournament Male");
 
                 tournament.Name = newTournamentName;
+                tournament.NumberOfRounds = numberOfRounds;
                 tournament.Type = (int)PlayerType.Male;
             }
             if (typeTournament == PlayerType.Female)
             {
                 var existingTournaments = await _client.From<Tournament>().Where(t => t.Type == (int)PlayerType.Female).Get();
                 var tournamentNames = existingTournaments.Models.Select(t => t.Name).ToList();
-                var newTournamentName = GenerateUniqueTournamentName(tournamentNames, "Tournament Female  ");
+                var newTournamentName = GenerateUniqueTournamentName(tournamentNames, "Tournament Female");
 
                 tournament.Name = newTournamentName;
+                tournament.NumberOfRounds = numberOfRounds;
                 tournament.Type = (int)PlayerType.Female;
             }
 
@@ -92,10 +106,10 @@ namespace Tennis.Data.Services
             var counter = 1;
             while (existingNames.Contains(uniqueName))
             {
-                uniqueName = $"{prefix}{counter}";
+                uniqueName = $"{prefix} {counter}";
                 counter++;
             }
-            return uniqueName;
+            return uniqueName.Trim();
         }
     }
 }

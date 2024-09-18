@@ -12,7 +12,7 @@ namespace Tennis.Services.Utils
                 return ValidationResult.Success;
             }
 
-            if (DateTime.TryParseExact(value.ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDateTime))
+            if (DateTime.TryParseExact(value.ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDateTime) || DateTime.TryParse(value.ToString(), out parsedDateTime))
             {
                 return ValidationResult.Success;
             }

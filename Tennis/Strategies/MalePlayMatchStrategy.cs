@@ -1,5 +1,7 @@
 ﻿using Mapster;
+using Microsoft.AspNetCore.Identity.Data;
 using Tennis.Data.Entities;
+using Tennis.MappingProfile.Dtos;
 
 namespace Tennis.Strategies
 {
