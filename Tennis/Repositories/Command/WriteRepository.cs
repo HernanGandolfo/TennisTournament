@@ -8,9 +8,9 @@ namespace Tennis.Repositories.Command
     {
         private readonly SupabaseService _supabaseService = supabaseService;
 
-        public async Task AddHistoryTournamentAsync(List<PlayerHistory> history)
+        public async Task<bool> AddHistoryTournamentAsync(List<PlayerHistory> history)
         {
-            await _supabaseService.AddHistoryTournamentAsync(history);
+            return await _supabaseService.AddHistoryTournamentAsync(history);
         }
 
         public async Task<Tournament> CreateTournamentAsync(PlayerType typeTournament)

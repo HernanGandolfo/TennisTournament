@@ -47,10 +47,10 @@ namespace Tennis.Data.Services
             }
         }
 
-        public async Task AddHistoryTournamentAsync(List<PlayerHistory> history)
+        public async Task<bool> AddHistoryTournamentAsync(List<PlayerHistory> history)
         {
             var insertResponse = await _client.From<PlayerHistory>().Insert(history);
-            var insertedRecord = insertResponse.Models.FirstOrDefault();
+            return insertResponse.ResponseMessage.IsSuccessStatusCode;
         }
 
         internal async Task<Tournament> CreateTournamentAsync(PlayerType typeTournament)

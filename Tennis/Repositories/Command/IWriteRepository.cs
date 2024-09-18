@@ -5,7 +5,7 @@ namespace Tennis.Repositories.Command
 {
     public interface IWriteRepository
     {
-        Task AddHistoryTournamentAsync(List<PlayerHistory> history);
+        Task<bool> AddHistoryTournamentAsync(List<PlayerHistory> history);
 
         Task<Tournament> CreateTournamentAsync(PlayerType typeTournament);
     }

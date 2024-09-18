@@ -2,26 +2,24 @@
 using System.ComponentModel.DataAnnotations;
 using Swashbuckle.AspNetCore.Annotations;
 using Tennis.MappingProfile.Dtos;
+using System.Globalization;
 using Tennis.Services;
 using Tennis.Data.Enum;
+using Tennis.Services.Request;
 
 namespace Tennis.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[ProducesResponseType(400)]
-    //[ProducesResponseType(401)]
-    //[ProducesResponseType(403)]
-    //[ProducesResponseType(404)]
-    //[ProducesResponseType(500)]
-    public class TournamentController : ControllerBase
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    [CustomFilterException]
+    public class TournamentController(ITournamentService tournament) : ControllerBase
     {
-        private readonly ITournamentService _tournament;
-
-        public TournamentController(ITournamentService tournament)
-        {
-            _tournament = tournament;
-        }
+        private readonly ITournamentService _tournament = tournament;
 
         [HttpGet("simulate")]
         [SwaggerOperation(Summary = "Simulate a tournament and return the winner.")]
@@ -34,7 +32,7 @@ namespace Tennis.Controllers
 
             if (canPlayers is null)
             {
-                return BadRequest("The number of players does not match the number of rounds specified.");
+                return BadRequest( new ValidationResult("The number of players does not match the number of rounds specified."));
             }
 
             PlayerDto winner = await _tournament.SimulateTournament(canPlayers, typeTournament);
@@ -43,8 +41,8 @@ namespace Tennis.Controllers
 
         [HttpGet("historyTournament")]
         [SwaggerOperation(Summary = "Returns tournament history.")]
-        // [ProducesDefaultResponseType(typeof(PlayerDto))]
-        public async Task<IActionResult> HistoryTournament()
+        [ProducesDefaultResponseType(typeof(List<PlayerHistoryDto>))]
+        public async Task<IActionResult> HistoryTournament([FromQuery] TournamentSearchRequest request)
         {
             return Ok(await _tournament.GetHistoryTournamentAsync());
         }
