@@ -6,7 +6,7 @@ namespace Tennis.Services.Utils
 {
     public static class ProblemDetailsHelper
     {
-        public static ProblemDetails CreateProblemDetails(HttpContext httpContext,string detailMessage, int? httpStatusCode = null)
+        public static ProblemDetails CreateProblemDetails(HttpContext httpContext, string detailMessage, int? httpStatusCode = null)
         {
             var problemDetails = new ProblemDetails
             {
@@ -17,7 +17,15 @@ namespace Tennis.Services.Utils
                 Instance = httpContext.Request.Path
             };
 
-            problemDetails.Extensions["traceId"] = Activity.Current?.Id ?? httpContext.TraceIdentifier;
+            if (Activity.Current != null && Activity.Current.Id != null)
+            {
+                problemDetails.Extensions["traceId"] = Activity.Current.Id;
+            }
+            else
+            {
+                problemDetails.Extensions["traceId"] = "Trace ID not available";
+            }
+
             return problemDetails;
         }
     }

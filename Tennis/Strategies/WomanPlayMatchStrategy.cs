@@ -7,6 +7,9 @@ namespace Tennis.Strategies
     {
         public Player PlayMatch(Player player1, Player player2)
         {
+            if (player1 == null) throw new ArgumentNullException(nameof(player1));
+            if (player2 == null) throw new ArgumentNullException(nameof(player2));
+
             var play1 = player1.Adapt<WomanPlayer>();
             var play2 = player2.Adapt<WomanPlayer>();
 
