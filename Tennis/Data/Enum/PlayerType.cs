@@ -2,7 +2,7 @@
 {
     public enum PlayerType
     {
-        Male = 1,
-        Female = 2
+        Man = 1,
+        Woman = 2
     }
 }

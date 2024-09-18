@@ -65,29 +65,29 @@ namespace Tennis.Data.Services
             return insertResponse.ResponseMessage.IsSuccessStatusCode;
         }
 
-        public async Task<Tournament> CreateTournamentAsync(PlayerType typeTournament, int numberOfRounds)
+        public async Task<Tournament> CreateTournamentAsync(PlayerType typeTournament,string titleTournament, int numberOfRounds)
         {
             var tournament = new Tournament();
             tournament.Created = DateTime.Now;
-            if (typeTournament == PlayerType.Male)
+            if (typeTournament == PlayerType.Man)
             {
-                var existingTournaments = await _client.From<Tournament>().Where(t => t.Type == (int)PlayerType.Male).Get();
+                var existingTournaments = await _client.From<Tournament>().Where(t => t.Type == (int)PlayerType.Man).Get();
                 var tournamentNames = existingTournaments.Models.Select(t => t.Name).ToList();
-                var newTournamentName = GenerateUniqueTournamentName(tournamentNames, "Tournament Male");
+                var newTournamentName = string.IsNullOrEmpty(titleTournament) ? GenerateUniqueTournamentName(tournamentNames, "Tournament Men's") : titleTournament;
 
                 tournament.Name = newTournamentName;
                 tournament.NumberOfRounds = numberOfRounds;
-                tournament.Type = (int)PlayerType.Male;
+                tournament.Type = (int)PlayerType.Man;
             }
-            if (typeTournament == PlayerType.Female)
+            if (typeTournament == PlayerType.Woman)
             {
-                var existingTournaments = await _client.From<Tournament>().Where(t => t.Type == (int)PlayerType.Female).Get();
+                var existingTournaments = await _client.From<Tournament>().Where(t => t.Type == (int)PlayerType.Woman).Get();
                 var tournamentNames = existingTournaments.Models.Select(t => t.Name).ToList();
-                var newTournamentName = GenerateUniqueTournamentName(tournamentNames, "Tournament Female");
+                var newTournamentName = string.IsNullOrEmpty(titleTournament) ? GenerateUniqueTournamentName(tournamentNames, "Tournament Women's") : titleTournament;
 
                 tournament.Name = newTournamentName;
                 tournament.NumberOfRounds = numberOfRounds;
-                tournament.Type = (int)PlayerType.Female;
+                tournament.Type = (int)PlayerType.Woman;
             }
 
             return await AddHistoryTournamentAsync(tournament);

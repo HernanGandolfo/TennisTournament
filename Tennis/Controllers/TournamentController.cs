@@ -23,20 +23,22 @@ namespace Tennis.Controllers
         [SwaggerOperation(Summary = "Simulate a tournament and return the winner.")]
         [ProducesDefaultResponseType(typeof(PlayerDto))]
         public async Task<IActionResult> SimulateTournament(
+            [SwaggerParameter(Description = "Tournament type: 1 default title is Tournament Men's and type:2 default title is Tournament is Women's"), FromQuery]string titleTournament,
             [Required, FromQuery] int numberOfRounds,
             [SwaggerParameter(Description = "Tournament type: 1 is Men's and 2 is Women's"), FromQuery] PlayerType typeTournament)
         {
-            var canPlayers = await _tournament.GetPlayersRoundsAsyns(numberOfRounds, typeTournament);
+            var canPlayers = await _tournament.GetPlayersRoundsAsyns( numberOfRounds, typeTournament);
 
             if (canPlayers is null)
             {
-                return BadRequest(ProblemDetailsHelper
-                    .CreateProblemDetails(HttpContext,
-                    ConstansErrorMessage.ErrorNumberPlayer, 
-                    (int)HttpStatusCode.BadRequest));
+                return BadRequest(
+                    ProblemDetailsHelper.CreateProblemDetails(
+                        HttpContext, 
+                        ConstansErrorMessage.ErrorNumberPlayer, 
+                        (int)HttpStatusCode.BadRequest));
             }
 
-            PlayerDto winner = await _tournament.SimulateTournament(canPlayers, typeTournament, numberOfRounds);
+            PlayerDto winner = await _tournament.SimulateTournament(canPlayers, titleTournament, typeTournament, numberOfRounds);
             return Ok(winner);
         }
 

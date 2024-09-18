@@ -48,11 +48,11 @@ namespace Tennis.Services
             return (players.Count <= canPlayer || canPlayer < 0) ? null : this.ObtenerObjetosAleatorios(players, canPlayer);
         }
 
-        public async Task<PlayerDto> SimulateTournament(List<Player> players, PlayerType typeTournament, int numberOfRounds)
+        public async Task<PlayerDto> SimulateTournament(List<Player> players, string titleTournament, PlayerType typeTournament, int numberOfRounds)
         {
-            IPlayMatchStrategy playMatchStrategy = typeTournament == PlayerType.Male ? new MalePlayMatchStrategy() : new FemalePlayMatchStrategy();
+            IPlayMatchStrategy playMatchStrategy = typeTournament == PlayerType.Man ? new ManPlayMatchStrategy() : new WomanPlayMatchStrategy();
 
-            var createTournament = await _writeRepository.CreateTournamentAsync(typeTournament, numberOfRounds);
+            var createTournament = await _writeRepository.CreateTournamentAsync(typeTournament, titleTournament, numberOfRounds);
             List<PlayerHistory> histoyOrigins = [];
 
             int round = 1;

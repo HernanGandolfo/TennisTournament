@@ -5,12 +5,12 @@ using Tennis.MappingProfile.Dtos;
 
 namespace Tennis.Strategies
 {
-    public class MalePlayMatchStrategy : IPlayMatchStrategy
+    public class ManPlayMatchStrategy : IPlayMatchStrategy
     {
         public Player PlayMatch(Player player1, Player player2)
         {
-            var play1 = player1.Adapt<MalePlayer>();
-            var play2 = player2.Adapt<MalePlayer>();
+            var play1 = player1.Adapt<ManPlayer>();
+            var play2 = player2.Adapt<ManPlayer>();
 
             Random rand = new();
             int luckFactor1 = rand.Next(0, 100);
@@ -24,7 +24,7 @@ namespace Tennis.Strategies
 
         public List<PlayerHistory> PlayerHistoryMatch(List<Player> players, int idTournament, int roundPosition)
         {
-            var play = players.Adapt<List<MalePlayer>>();
+            var play = players.Adapt<List<ManPlayer>>();
             var playersHistory = play.Adapt<List<PlayerHistory>>();
 
             playersHistory.ForEach(x =>

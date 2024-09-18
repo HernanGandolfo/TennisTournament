@@ -26,8 +26,8 @@ namespace Tennis.Dependencies
             services.AddScoped<IReadOnlyRepository, ReadOnlyRepository>();
             services.AddScoped<IWriteRepository, WriteRepository>();
             services.AddScoped<ITournamentService, TournamentService>();
-            services.AddScoped<IPlayMatchStrategy, MalePlayMatchStrategy>();
-            services.AddScoped<IPlayMatchStrategy, FemalePlayMatchStrategy>();
+            services.AddScoped<IPlayMatchStrategy, ManPlayMatchStrategy>();
+            services.AddScoped<IPlayMatchStrategy, WomanPlayMatchStrategy>();
 
             // Register Mapster
             services.AddMapster();

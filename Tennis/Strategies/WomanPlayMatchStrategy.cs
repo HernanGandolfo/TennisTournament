@@ -3,12 +3,12 @@ using Tennis.Data.Entities;
 
 namespace Tennis.Strategies
 {
-    public class FemalePlayMatchStrategy : IPlayMatchStrategy
+    public class WomanPlayMatchStrategy : IPlayMatchStrategy
     {
         public Player PlayMatch(Player player1, Player player2)
         {
-            var play1 = player1.Adapt<FemalePlayer>();
-            var play2 = player2.Adapt<FemalePlayer>();
+            var play1 = player1.Adapt<WomanPlayer>();
+            var play2 = player2.Adapt<WomanPlayer>();
 
             Random rand = new Random();
             int luckFactor1 = rand.Next(0, 100);
@@ -22,7 +22,7 @@ namespace Tennis.Strategies
 
         public List<PlayerHistory> PlayerHistoryMatch(List<Player> players, int idTournament, int roundPosition)
         {
-            var play = players.Adapt<List<FemalePlayer>>();
+            var play = players.Adapt<List<WomanPlayer>>();
             var playersHistory = play.Adapt<List<PlayerHistory>>();
 
             playersHistory.ForEach(x =>

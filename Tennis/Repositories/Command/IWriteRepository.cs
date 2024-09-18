@@ -7,6 +7,6 @@ namespace Tennis.Repositories.Command
     {
         Task<bool> AddHistoryTournamentAsync(List<PlayerHistory> history);
 
-        Task<Tournament> CreateTournamentAsync(PlayerType typeTournament, int numberOfRounds);
+        Task<Tournament> CreateTournamentAsync(PlayerType typeTournament,string titleTournament, int numberOfRounds);
     }
 }

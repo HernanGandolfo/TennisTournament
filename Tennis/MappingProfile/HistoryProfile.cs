@@ -9,7 +9,7 @@ namespace Tennis.MappingProfile
     {
         public void Register(TypeAdapterConfig config)
         {
-            config.NewConfig<MalePlayer, PlayerHistory>()
+            config.NewConfig<ManPlayer, PlayerHistory>()
                .Map(x => x.IdPlayer, y => y.Id)
                .Map(x => x.PlayerName, y => y.Name)
                .Map(x => x.SkillLevel, y => y.SkillLevel)
@@ -17,7 +17,7 @@ namespace Tennis.MappingProfile
                .Map(x => x.MovementSpeed, y => y.MovementSpeed)
                .Ignore(x => x.Id, x => x.ReactionTime, x => x.Winner);
 
-            config.NewConfig<FemalePlayer, PlayerHistory>()
+            config.NewConfig<WomanPlayer, PlayerHistory>()
               .Map(x => x.IdPlayer, y => y.Id)
               .Map(x => x.PlayerName, y => y.Name)
               .Map(x => x.SkillLevel, y => y.SkillLevel)
@@ -29,7 +29,7 @@ namespace Tennis.MappingProfile
                 .Map(x => x.Name, y => y.Name)
                 .Map(x => x.Created, y => y.Created)
                 .Map(x => x.NumberOfRounds, y => y.NumberOfRounds)
-                .Map(x => x.Type, y => y.Type == 1 ? PlayerType.Male : PlayerType.Female)
+                .Map(x => x.Type, y => y.Type == 1 ? PlayerType.Man : PlayerType.Woman)
                 .Map(x => x.PlayerHistories, y => y.PlayerHistories);
 
             config.NewConfig<PlayerHistory, PlayerHistoryDto>()

@@ -13,9 +13,9 @@ namespace Tennis.Repositories.Command
             return await _supabaseService.AddHistoryTournamentAsync(history);
         }
 
-        public async Task<Tournament> CreateTournamentAsync(PlayerType typeTournament, int numberOfRounds)
+        public async Task<Tournament> CreateTournamentAsync(PlayerType typeTournament, string titleTournament, int numberOfRounds)
         {
-            return await _supabaseService.CreateTournamentAsync(typeTournament, numberOfRounds);
+            return await _supabaseService.CreateTournamentAsync(typeTournament, titleTournament, numberOfRounds);
         }
     }
 }
