@@ -13,6 +13,7 @@ namespace Tennis.Dependencies
 
         public void ConfigureService(IServiceCollection services)
         {
+
             services.AddControllers();
 
             SupabaseService supabaseService = ConfigureDbSupaBase();
@@ -20,10 +21,10 @@ namespace Tennis.Dependencies
             services.AddSingleton(supabaseService);
 
             // Add services to the container.
-            services.AddScoped<PlayerRepository>();
+            services.AddScoped<IPlayerRepository, PlayerRepository>();
+            services.AddScoped<ITournamentService, TournamentService>();
             services.AddScoped<IPlayMatchStrategy, MalePlayMatchStrategy>();
             services.AddScoped<IPlayMatchStrategy, FemalePlayMatchStrategy>();
-            services.AddScoped<ITournamentService, TournamentService>();
 
             // Register Mapster
             services.AddMapster();

@@ -12,12 +12,29 @@ namespace Tennis.MappingProfile
                 .Map(x => x.Id , y => y.Id)
                 .Map(x => x.Name, y => y.Name)
                 .Map(x => x.SkillLevel, y => y.SkillLevel);
+            
+            config.NewConfig<Player, MalePlayer>()
+                .Map(x => x.Id, y => y.Id)
+                .Map(x => x.Name, y => y.Name)
+                .Map(x => x.SkillLevel, y => new Random().Next(0, 100))
+                .Map(x => x.Strength, y => new Random().Next(0, 100))
+                .Map(x => x.MovementSpeed, y => new Random().Next(0, 100));
 
             config.NewConfig<Player, FemalePlayer>()
                 .Map(x => x.Id, y => y.Id)
                 .Map(x => x.Name, y => y.Name)
-                .Map(x => x.SkillLevel, y => y.SkillLevel)
+                .Map(x => x.SkillLevel, y => new Random().Next(0, 100))
                 .Map(x => x.ReactionTime, y => new Random().Next(0,100));
+
+            config.NewConfig<FemalePlayer, PlayerDto>()
+                .Map(x => x.Id, y => y.Id)
+                .Map(x => x.Name, y => y.Name)
+                .Map(x => x.SkillLevel, y => y.SkillLevel);
+
+            config.NewConfig<MalePlayer, PlayerDto>()
+               .Map(x => x.Id, y => y.Id)
+               .Map(x => x.Name, y => y.Name)
+               .Map(x => x.SkillLevel, y => y.SkillLevel);
         }
     }
 }

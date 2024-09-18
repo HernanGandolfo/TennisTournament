@@ -6,26 +6,27 @@ using Tennis.Strategies;
 
 namespace Tennis.Services
 {
-    public class TournamentService(IPlayerRepository playerRepository, IPlayMatchStrategy malePlayMatchStrategy, IPlayMatchStrategy femalePlayMatchStrategy) : ITournamentService
+    public class TournamentService(IPlayerRepository playerRepository, IPlayMatchStrategy playMatchStrategy) : ITournamentService
     {
         private readonly IPlayerRepository _playerRepository = playerRepository;
-        private readonly IPlayMatchStrategy _malePlayMatchStrategy = malePlayMatchStrategy;
-        private readonly IPlayMatchStrategy _femalePlayMatchStrategy = femalePlayMatchStrategy;
+        private readonly IPlayMatchStrategy _playMatchStrategy = playMatchStrategy;
 
         public async Task<List<Player>> GetPlayersRoundsAsyns(int numberOfRounds, PlayerType typeTournament)
         {
-            var players = await _playerRepository.GetPlayersAsync(x => x.PlayerTypeId == (int)typeTournament);
+            var intType = (int)typeTournament;
+            var players = await _playerRepository.GetPlayersAsync(x => x.PlayerTypeId == intType);
 
-            if (players.Count <= numberOfRounds * 2)
+            var canPlayer = (int)Math.Pow(2, numberOfRounds);
+            if (players.Count <= canPlayer)
             {
                 return null;
             }
-            return this.ObtenerObjetosAleatorios(players, numberOfRounds * 2);
+            return this.ObtenerObjetosAleatorios(players, canPlayer);
         }
 
         public PlayerDto SimulateTournament(List<Player> players, PlayerType typeTournament)
         {
-            IPlayMatchStrategy playMatchStrategy = typeTournament == PlayerType.Male ? _malePlayMatchStrategy : _femalePlayMatchStrategy;
+            IPlayMatchStrategy playMatchStrategy = typeTournament == PlayerType.Male ? new MalePlayMatchStrategy() : new FemalePlayMatchStrategy();
 
             while (players.Count > 1)
             {
