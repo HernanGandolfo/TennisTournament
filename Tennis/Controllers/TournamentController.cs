@@ -2,21 +2,19 @@
 using System.ComponentModel.DataAnnotations;
 using Swashbuckle.AspNetCore.Annotations;
 using Tennis.MappingProfile.Dtos;
-using System.Globalization;
 using Tennis.Services;
 using Tennis.Data.Enum;
 using Tennis.Services.Request;
+using System.Net;
+using Tennis.Services.Utils;
 
 namespace Tennis.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(401)]
-    [ProducesResponseType(403)]
-    [ProducesResponseType(404)]
-    [ProducesResponseType(500)]
-    [CustomFilterException]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public class TournamentController(ITournamentService tournament) : ControllerBase
     {
         private readonly ITournamentService _tournament = tournament;
@@ -32,7 +30,10 @@ namespace Tennis.Controllers
 
             if (canPlayers is null)
             {
-                return BadRequest( new ValidationResult("The number of players does not match the number of rounds specified."));
+                return BadRequest(ProblemDetailsHelper
+                    .CreateProblemDetails(HttpContext,
+                    ConstansErrorMessage.ErrorNumberPlayer, 
+                    (int)HttpStatusCode.BadRequest));
             }
 
             PlayerDto winner = await _tournament.SimulateTournament(canPlayers, typeTournament, numberOfRounds);

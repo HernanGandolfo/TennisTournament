@@ -1,6 +1,4 @@
 ﻿using Mapster;
-using System.Linq.Expressions;
-using System.Xml.Linq;
 using Tennis.Data.Entities;
 using Tennis.Data.Enum;
 using Tennis.MappingProfile.Dtos;
@@ -21,15 +19,23 @@ namespace Tennis.Services
         {
             var result = await _readOnlyRepository.GetHistoryTournamentsAsync(request);
 
-            var sortedTournaments = result.Select(t =>
+            // Construir una consulta dinámica
+            var query = result.AsQueryable();
+
+            if (!string.IsNullOrEmpty(request.NamePlayer))
             {
-                t.PlayerHistories = t.PlayerHistories
-                    .OrderByDescending(ph => ph.PositionRound)
-                    .ToList();
-                return t;
-            }).ToList();
-            
-            return sortedTournaments.Adapt<List<TournamentDto>>();
+                query = query.Where(x => x.PlayerHistories.Any(y => y.PlayerName.ToLower().Contains(request.NamePlayer.ToLower())));
+            }
+
+            if (request.Winner.HasValue)
+            {
+                query = query.Where(x => x.PlayerHistories.Any(y => y.Winner == request.Winner.Value));
+            }
+
+            // Ejecutar la consulta y traer los datos a memoria
+            var tournaments = query.ToList();
+
+            return FilterAndSortTournaments(request, tournaments);
         }
 
         public async Task<List<Player>> GetPlayersRoundsAsyns(int numberOfRounds, PlayerType typeTournament)
@@ -38,11 +44,8 @@ namespace Tennis.Services
             var players = await _readOnlyRepository.GetPlayersAsync(x => x.PlayerTypeId == intType);
 
             var canPlayer = (int)Math.Pow(2, numberOfRounds);
-            if (players.Count <= canPlayer)
-            {
-                return null;
-            }
-            return this.ObtenerObjetosAleatorios(players, canPlayer);
+
+            return (players.Count <= canPlayer || canPlayer < 0) ? null : this.ObtenerObjetosAleatorios(players, canPlayer);
         }
 
         public async Task<PlayerDto> SimulateTournament(List<Player> players, PlayerType typeTournament, int numberOfRounds)
@@ -62,7 +65,7 @@ namespace Tennis.Services
                     nextRound.Add(nextPlayer);
                 }
                 players = nextRound;
-                validatePosition(histoyOrigins, playMatchStrategy.PlayerHistoryMatch(players, createTournament.Id, round++));
+                this.validatePosition(histoyOrigins, playMatchStrategy.PlayerHistoryMatch(players, createTournament.Id, round++));
             }
             return await WinnerIs(players, createTournament, histoyOrigins);
         }
@@ -79,7 +82,7 @@ namespace Tennis.Services
                     x.Winner = true;
                 }
             });
-            await SaveHistoryAsync(playerHistories);
+            await this.SaveHistoryAsync(playerHistories);
             return result;
         }
 
@@ -100,14 +103,40 @@ namespace Tennis.Services
             }
         }
 
-        private async Task SaveHistoryAsync(List<PlayerHistory> history)
+        private async Task SaveHistoryAsync(List<PlayerHistory> history) => await _writeRepository.AddHistoryTournamentAsync(history);
+
+        private List<Player> ObtenerObjetosAleatorios(List<Player> lista, int cantidad) => lista.OrderBy(x => new Random().Next()).Take(cantidad).ToList();
+
+        private static List<TournamentDto> FilterAndSortTournaments(TournamentSearchRequest request, List<Tournament> tournaments)
         {
-            await _writeRepository.AddHistoryTournamentAsync(history);
+            // Filtrar manualmente PlayerHistories para cada torneo
+            var filteredTournaments = tournaments.Select(t =>
+            {
+                if (!string.IsNullOrEmpty(request.NamePlayer))
+                {
+                    t.PlayerHistories = t.PlayerHistories
+                        .Where(y => y.PlayerName.ToLower().Contains(request.NamePlayer.ToLower()))
+                        .ToList();
+                }
+
+                if (request.Winner.HasValue)
+                {
+                    t.PlayerHistories = t.PlayerHistories
+                        .Where(y => y.Winner == request.Winner.Value)
+                        .ToList();
+                }
+
+                // Ordenar PlayerHistories por PositionRound
+                t.PlayerHistories = t.PlayerHistories
+                    .OrderByDescending(ph => ph.PositionRound)
+                    .ToList();
+
+                return t;
+            }).ToList();
+
+            // Mapear a DTO
+            return filteredTournaments.Adapt<List<TournamentDto>>();
         }
 
-        private List<Player> ObtenerObjetosAleatorios(List<Player> lista, int cantidad)
-        {
-            return lista.OrderBy(x => new Random().Next()).Take(cantidad).ToList();
-        }
     }
 }

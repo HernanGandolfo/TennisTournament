@@ -31,6 +31,7 @@ namespace Tennis.Dependencies
 
             // Register Mapster
             services.AddMapster();
+            services.AddMvc();
 
             // Configure Mapster
             MapsterDependencies.AddMappingProfile(services);

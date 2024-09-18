@@ -14,5 +14,9 @@ namespace Tennis.Services.Request
 
         [SwaggerParameter(Description = "Tournament type: 1 is Men's and 2 is Women's")]
         public PlayerType TypeTournament { get; set; }
+
+        public string NamePlayer { get; set; }
+
+        public bool? Winner { get; set; }
     }
 }
