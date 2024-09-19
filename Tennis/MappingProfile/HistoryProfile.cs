@@ -29,11 +29,11 @@ namespace Tennis.MappingProfile
                 .Map(x => x.Name, y => y.Name)
                 .Map(x => x.Created, y => y.Created)
                 .Map(x => x.NumberOfRounds, y => y.NumberOfRounds)
-                .Map(x => x.Type, y => y.Type == 1 ? PlayerType.Man : PlayerType.Woman)
+                .Map(x => x.Type, y => y.Type == 1 ? PlayerType.Man.ToString() : PlayerType.Woman.ToString())
                 .Map(x => x.PlayerHistories, y => y.PlayerHistories);
 
             config.NewConfig<PlayerHistory, PlayerHistoryDto>()
-               .Map(x => x.IdPlayer, y => y.Id)
+               .Map(x => x.IdPlayer, y => y.IdPlayer)
                .Map(x => x.PlayerName, y => y.PlayerName)
                .Map(x => x.SkillLevel, y => y.SkillLevel)
                .Map(x => x.MovementSpeed, y => y.MovementSpeed)

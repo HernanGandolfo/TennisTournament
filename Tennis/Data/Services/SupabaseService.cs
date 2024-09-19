@@ -35,7 +35,7 @@ namespace Tennis.Data.Services
             }
         }
 
-        public async Task<List<Tournament>> GetHistoryTournamentAsync(TournamentSearchRequest request = null)
+        public async Task<List<Tournament>> GetHistoryTournamentAsync(TournamentSearchRequest request)
         {
             ModeledResponse<Tournament> responseNameTour = null;
             List<Tournament> response = null;
