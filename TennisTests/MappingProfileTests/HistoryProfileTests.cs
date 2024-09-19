@@ -1,9 +1,8 @@
 ﻿using Mapster;
-using Tennis.Data.Entities;
-using Tennis.Data.Enum;
-using Tennis.MappingProfile;
-using Tennis.MappingProfile.Dtos;
-using Xunit;
+using Tennis.Application.MappingProfile;
+using Tennis.Application.MappingProfile.Dtos;
+using Tennis.Core.Entities;
+using Tennis.Core.Enum;
 
 namespace Tennis.Tests.MappingProfile
 {

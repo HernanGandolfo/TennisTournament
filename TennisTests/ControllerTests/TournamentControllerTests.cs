@@ -1,12 +1,12 @@
 ﻿using Moq;
 using Microsoft.AspNetCore.Mvc;
-using Tennis.Controllers;
-using Tennis.Services;
-using Tennis.MappingProfile.Dtos;
-using Tennis.Services.Request;
-using Tennis.Data.Enum;
-using Tennis.Data.Entities;
 using Microsoft.AspNetCore.Http;
+using Tennis.Core.Entities;
+using Tennis.Core.Enum;
+using Tennis.Application.Services;
+using Tennis.Application.MappingProfile.Dtos;
+using Tennis.Presentation.Controllers;
+using Tennis.Application.Services.Request;
 
 namespace Tennis.Tests
 {

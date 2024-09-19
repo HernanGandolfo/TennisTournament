@@ -1,9 +1,9 @@
 ﻿using Moq;
-using Tennis.Data.Entities;
-using Tennis.Data.Enum;
-using Tennis.MappingProfile.Dtos;
-using Tennis.Services;
-using Tennis.Services.Request;
+using Tennis.Application.MappingProfile.Dtos;
+using Tennis.Application.Services;
+using Tennis.Application.Services.Request;
+using Tennis.Core.Entities;
+using Tennis.Core.Enum;
 
 public class TournamentServiceTests
 {

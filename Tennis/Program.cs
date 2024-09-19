@@ -1,5 +1,5 @@
 using Supabase;
-using Tennis.Dependencies;
+using Tennis.Application.Dependencies;
 
 var builder = WebApplication.CreateBuilder(args);
 

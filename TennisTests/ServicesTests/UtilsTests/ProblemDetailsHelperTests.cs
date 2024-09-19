@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Tennis.Services.Utils;
 using Moq;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
-using Tennis.Controllers;
-using Tennis.Services;
+using Tennis.Application.Services;
+using Tennis.Application.Services.Utils;
+using Tennis.Presentation.Controllers;
 
 public class ProblemDetailsHelperTests
 {
