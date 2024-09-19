@@ -42,7 +42,7 @@ Este proyecto utiliza varios paquetes NuGet para facilitar el desarrollo y la in
 ## Instalación
 
 1. Clona el repositorio:
-    git clone https://github.com/tu_usuario/tu_repositorio.git
+    gh repo clone HernanGandolfo/TennisTournament
 
 2. Navega al directorio del proyecto:
     cd tu_repositorio
